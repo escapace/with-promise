@@ -5,6 +5,12 @@ This library provides two complementary utilities for managing async operations:
 - **withPromise**: Turns regular Promises into cancellable ones
 - **withPromises**: Async task controller implementing latest-wins semantics with automatic cancellation and deduplication
 
+### Installation
+
+```bash
+npm install @escapace/with-promise
+```
+
 # withPromise
 
 withPromise turns regular Promises into cancellable ones.
@@ -18,12 +24,6 @@ withPromise turns regular Promises into cancellable ones.
 ## Performance Cost
 
 Applications that perform network requests, file I/O, or computation experience **close to no performance impact** from withPromise, as any work time completely masks the withPromise overhead. withPromise adds overhead to pure Promise operations (`Promise.resolve()` is 15x faster, `new Promise(resolve => setImmediate(resolve))` is 3x faster). withPromise performs optimally in operations such as network requests, file operations, or computations where the overhead becomes negligible compared to the work being performed.
-
-## Installation
-
-```bash
-npm install @escapace/with-promise
-```
 
 ## Quick Start
 
