@@ -8,7 +8,7 @@ This library provides two complementary utilities for managing async operations:
 ### Installation
 
 ```bash
-npm install @escapace/with-promise
+pnpm install @escapace/with-promise
 ```
 
 # withPromise
