@@ -1,3 +1,10 @@
+# @escapace/with-promise
+
+This library provides two complementary utilities for managing async operations:
+
+- **withPromise**: Turns regular Promises into cancellable ones
+- **withPromises**: Async task controller implementing latest-wins semantics with automatic cancellation and deduplication
+
 # withPromise
 
 withPromise turns regular Promises into cancellable ones.
@@ -93,3 +100,114 @@ promise.cancel(): Promise<void>
 - Executes all registered cancellation callbacks
 - Returns a Promise that resolves when cleanup is complete
 - Safe to call multiple times
+
+# withPromises
+
+Async task controller implementing latest-wins semantics with automatic cancellation and deduplication. At most one promise runs at any time.
+
+- **Single in-flight**: There is never more than one running task; a switch cancels the previous in-flight promise exactly once
+- **Latest wins for commits**: Only the current promise can commit; if you switch from A to B before A finishes, A is canceled and only B can subsequently commit; late results from A are ignored
+- **Same-key deduplication**: Switching to the same key in two scenarios has no effect when `force: false` - while idle (switching to last committed key) or while in-flight (switching to currently running key)
+- **Force**: `switch(key, true)` always starts a fresh promise for the key, canceling the current one even if it's already running the same key
+- **Success-only notifications**: Subscribers are called exactly once per successful commit, never on reject or cancel; errors don't change the last good result
+- **In-order emissions**: Notifications appear in the order successful tasks finish, never out of order or duplicated
+- **Rollback**: When a different key is in-flight and you switch back to the last committed key with `force: false`, the in-flight promise is canceled and the machine returns to idle with the previous value; no notification fires since nothing new succeeded
+
+## Quick Start
+
+```typescript
+import { withPromises } from '@escapace/with-promise'
+
+// Define async operations for different tabs
+const tabs = {
+  overview: async (onCancel) => {
+    const controller = new AbortController()
+    onCancel(() => controller.abort())
+
+    const response = await fetch('/api/dashboard/overview', {
+      signal: controller.signal,
+    })
+    return await response.json()
+  },
+  analytics: async (onCancel) => {
+    const controller = new AbortController()
+    onCancel(() => controller.abort())
+
+    const response = await fetch('/api/dashboard/analytics', {
+      signal: controller.signal,
+    })
+    return await response.json()
+  },
+  settings: async (onCancel) => {
+    const controller = new AbortController()
+    onCancel(() => controller.abort())
+
+    const response = await fetch('/api/dashboard/settings', {
+      signal: controller.signal,
+    })
+    return await response.json()
+  },
+}
+
+const dashboard = withPromises(tabs)
+
+// Subscribe to successful tab loads
+const unsubscribe = dashboard.subscribe((tab, data) => {
+  console.log(`Loaded ${tab} tab:`, data)
+})
+
+// Switch between tabs - only latest request will complete
+dashboard.switch('overview') // Starts loading overview
+dashboard.switch('analytics') // Cancels overview, starts loading analytics
+dashboard.switch('settings') // Cancels analytics, starts loading settings
+
+// Force refresh current tab
+dashboard.switch('settings', true)
+```
+
+## API Reference
+
+### `withPromises<T>(records)`
+
+Creates a promise manager for keyed async operations.
+
+**Parameters:**
+
+- `records`: `WithPromisesRecord<T>`
+  - Object mapping keys to promise factory functions
+  - Each factory receives `onCancel` callback for cleanup registration
+  - Type: `{ [K in keyof T]: (onCancel: (callback: () => unknown) => void) => Promise<T[K]> }`
+
+**Returns:** `WithPromises<T>`
+
+### WithPromises Interface
+
+```typescript
+interface WithPromises<T extends object> {
+  subscribe: (subscription: WithPromisesSubscription<T>) => () => void
+  switch: (key: keyof T, force?: boolean) => void
+}
+```
+
+### Subscribe Method
+
+```typescript
+subscribe(callback: (key: keyof T, value: T[keyof T]) => void): () => void
+```
+
+- Registers a callback for successful promise completions
+- Called with `(key, value)` when a promise fulfills
+- Returns unsubscribe function
+- Only successful operations trigger notifications (errors and cancellations do not)
+
+### Switch Method
+
+```typescript
+switch(key: keyof T, force?: boolean): void
+```
+
+- **Different key or forced**: Cancels current promise (if any) and starts the new one
+- **Same key already in-flight with `force: false`**: No-op (deduplication)
+- **Same key as last committed while idle with `force: false`**: No-op (deduplication)
+- **Rollback case**: Switching back to last committed key while different key is in-flight cancels and returns to idle
+- **Force restart**: `force: true` always restarts, canceling current work even for the same key

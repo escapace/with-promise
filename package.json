@@ -1,6 +1,6 @@
 {
   "name": "@escapace/with-promise",
-  "description": "Cancellable Promises for TypeScript with immediate cancellation and cleanup callbacks",
+  "description": "Cancellable Promises and async task controller implementing latest-wins semantics with automatic cancellation and deduplication",
   "version": "0.0.0",
   "author": {
     "name": "escapace",
@@ -26,7 +26,7 @@
     "vitest": "3.2.4"
   },
   "engines": {
-    "pnpm": "^10.10.0"
+    "pnpm": "^10.14.0"
   },
   "exports": {
     ".": {
@@ -46,13 +46,6 @@
     "@escapace/fsm": "^4.2.0",
     "coastal": "^0.2.1"
   },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild",
-      "lefthook",
-      "oxc-resolver"
-    ]
-  },
   "private": false,
   "publishConfig": {
     "access": "public",
@@ -60,7 +53,6 @@
   },
   "repository": "escapace/with-promise",
   "scripts": {
-    "bench": "vitest bench --no-coverage",
     "build": "tsx scripts/build.ts",
     "format": "syncpack format && eslint --no-warn-ignored --fix && prettier -uw .",
     "lint": "ls-lint --config .ls-lint.yaml && knip --no-config-hints && eslint",
