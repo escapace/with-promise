@@ -25,7 +25,7 @@ function createWorkBenchmarks(durationMs: number) {
 
   bench(`withPromise + ${durationMs}ms work`, async () => {
     const state = await withPromise(async () => await createWorkPromise(durationMs))
-    if (state.type === 'fulfilled') {
+    if (state.state === 'fulfilled') {
       void state.value
     }
   })
@@ -41,7 +41,7 @@ describe('Promise Overhead Benchmarks', () => {
 
       bench('withPromise (immediate)', async () => {
         const state = await withPromise(async () => 'result')
-        if (state.type === 'fulfilled') {
+        if (state.state === 'fulfilled') {
           void state.value
         }
       })
@@ -62,7 +62,7 @@ describe('Promise Overhead Benchmarks', () => {
               setImmediate(() => resolve('result'))
             }),
         )
-        if (state.type === 'fulfilled') {
+        if (state.state === 'fulfilled') {
           void state.value
         }
       })

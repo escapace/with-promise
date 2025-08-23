@@ -4,9 +4,9 @@ withPromise turns regular Promises into cancellable ones.
 
 - **Immediate response**: The Promise immediately settles as cancelled instead of waiting for the cancellation to finish
 - **Cleanup execution**: Any cleanup functions registered during Promise creation get executed
-- **State wrapping**: Instead of returning the actual value, it returns an object describing the Promise state
+- **Wrapping**: Instead of returning the actual value, it returns an object describing the Promise state
 - **Safe cancellation**: Multiple cancel calls work safely, cleanup functions run in order, and errors in cleanup don't break anything
-- **Normal Promise behavior**: When not cancelled, it behaves exactly like a regular Promise but with the wrapped state format
+- **Normal Promise behavior**: When not cancelled, it behaves exactly like a regular Promise but with the wrapped result format
 
 ## Performance Cost
 
@@ -43,9 +43,9 @@ setTimeout(() => request.cancel(), 2000)
 
 // Handle the result
 const response = await request
-if (response.type === 'cancelled') {
+if (response.state === 'cancelled') {
   console.log('Request was cancelled')
-} else if (response.type === 'fulfilled') {
+} else if (response.state === 'fulfilled') {
   console.log('Data:', response.value)
 } else {
   console.log('Error:', response.value)
@@ -66,21 +66,21 @@ Creates a cancellable promise.
 
 **Returns:** `WithPromise<T>`
 
-- Extends `Promise<WithPromiseState<T>>` with a `cancel()` method
+- Extends `Promise<WithPromiseResult<T>>` with a `cancel()` method
 
-### Promise States
+### Promise Result
 
-Promises settle with state objects:
+Promises settle with a result object:
 
 ```typescript
 // Promise fulfilled successfully
-{ type: 'fulfilled', value: T }
+{ state: 'fulfilled', value: T }
 
 // Promise rejected with error
-{ type: 'rejected', value: unknown }
+{ state: 'rejected', value: unknown }
 
 // Promise cancelled
-{ type: 'cancelled' }
+{ state: 'cancelled' }
 ```
 
 ### Cancel Method

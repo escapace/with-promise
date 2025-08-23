@@ -37,7 +37,7 @@ describe('Promise Wrapper', () => {
       })
 
       const result = await promiseWrapper
-      assert.deepEqual(result, { type: 'fulfilled', value: 'success' })
+      assert.deepEqual(result, { state: 'fulfilled', value: 'success' })
     })
 
     it('resolves with rejected state for failed promises', async () => {
@@ -48,7 +48,7 @@ describe('Promise Wrapper', () => {
       })
 
       const result = await promiseWrapper
-      assert.deepEqual(result, { type: 'rejected', value: error })
+      assert.deepEqual(result, { state: 'rejected', value: error })
     })
 
     it('resolves with cancelled state immediately when cancelled', async () => {
@@ -61,7 +61,7 @@ describe('Promise Wrapper', () => {
       // Cancel before completion - promise resolves immediately to cancelled state
       const cancelPromise = promiseWrapper.cancel()
       const result = await promiseWrapper
-      assert.deepEqual(result, { type: 'cancelled' })
+      assert.deepEqual(result, { state: 'cancelled' })
 
       // Cancel promise should also complete
       await cancelPromise
@@ -81,7 +81,7 @@ describe('Promise Wrapper', () => {
 
       // Promise resolves immediately to cancelled state
       const result = await promiseWrapper
-      assert.equal(result.type, 'cancelled')
+      assert.equal(result.state, 'cancelled')
 
       // Cancellation callbacks execute asynchronously
       await cancelPromise
@@ -99,7 +99,7 @@ describe('Promise Wrapper', () => {
 
       // Promise resolves immediately to cancelled state without waiting for operation
       const result = await promiseWrapper
-      assert.equal(result.type, 'cancelled')
+      assert.equal(result.state, 'cancelled')
 
       await cancelPromise
     })
@@ -155,7 +155,7 @@ describe('Promise Wrapper', () => {
 
       // Promise resolves immediately to cancelled state
       const result = await promiseWrapper
-      assert.equal(result.type, 'cancelled')
+      assert.equal(result.state, 'cancelled')
 
       // All cancel promises should resolve
       await Promise.all(cancelPromises)
@@ -178,7 +178,7 @@ describe('Promise Wrapper', () => {
       // First cancellation - promise resolves immediately
       const firstCancel = promiseWrapper.cancel()
       const result = await promiseWrapper
-      assert.equal(result.type, 'cancelled')
+      assert.equal(result.state, 'cancelled')
       await firstCancel
 
       // Subsequent cancellations should return immediately
@@ -208,7 +208,7 @@ describe('Promise Wrapper', () => {
 
       // Promise resolves immediately to cancelled state
       const result = await promiseWrapper
-      assert.equal(result.type, 'cancelled')
+      assert.equal(result.state, 'cancelled')
 
       // Advance timers to complete async callback and wait for cancellation
       await vi.advanceTimersByTimeAsync(10)
@@ -241,7 +241,7 @@ describe('Promise Wrapper', () => {
       // Promise resolves immediately despite callback errors
       const cancelPromise = promiseWrapper.cancel()
       const result = await promiseWrapper
-      assert.equal(result.type, 'cancelled')
+      assert.equal(result.state, 'cancelled')
 
       // Should not throw despite callback error
       await cancelPromise
@@ -267,7 +267,7 @@ describe('Promise Wrapper', () => {
 
       // Promise resolves immediately to cancelled state
       const result = await promiseWrapper
-      assert.equal(result.type, 'cancelled')
+      assert.equal(result.state, 'cancelled')
 
       // Callback should not have completed yet
       assert.equal(callbackCompleted, false)
@@ -294,7 +294,7 @@ describe('Promise Wrapper', () => {
 
       // Promise resolves immediately to cancelled state
       const result = await promiseWrapper
-      assert.equal(result.type, 'cancelled')
+      assert.equal(result.state, 'cancelled')
 
       await cancelPromise
 
@@ -317,7 +317,7 @@ describe('Promise Wrapper', () => {
 
       // Should work with Promise methods
       const result = await promiseWrapper
-      assert.deepEqual(result, { type: 'fulfilled', value: 'test' })
+      assert.deepEqual(result, { state: 'fulfilled', value: 'test' })
     })
 
     it('provides cancel method that returns Promise<void>', async () => {
@@ -423,7 +423,7 @@ describe('Promise Wrapper', () => {
       // Cancel the request - promise resolves immediately
       const cancelPromise = promiseWrapper.cancel()
       const result = await promiseWrapper
-      assert.equal(result.type, 'cancelled')
+      assert.equal(result.state, 'cancelled')
 
       // Wait for cancellation callbacks to complete
       await cancelPromise
@@ -456,7 +456,7 @@ describe('Promise Wrapper', () => {
       // Cancel before factory completes - promise resolves immediately
       const cancelPromise = promiseWrapper.cancel()
       const result = await promiseWrapper
-      assert.equal(result.type, 'cancelled')
+      assert.equal(result.state, 'cancelled')
 
       await cancelPromise
 
@@ -477,7 +477,7 @@ describe('Promise Wrapper', () => {
       // Should not throw when cancelled without callbacks - resolves immediately
       const cancelPromise = promiseWrapper.cancel()
       const result = await promiseWrapper
-      assert.equal(result.type, 'cancelled')
+      assert.equal(result.state, 'cancelled')
 
       await cancelPromise
     })
@@ -497,7 +497,7 @@ describe('Promise Wrapper', () => {
       // Start cancellation - promise resolves immediately
       const cancelPromise1 = promiseWrapper.cancel()
       const result = await promiseWrapper
-      assert.equal(result.type, 'cancelled')
+      assert.equal(result.state, 'cancelled')
 
       // Immediately try to cancel again
       const cancelPromise2 = promiseWrapper.cancel()
