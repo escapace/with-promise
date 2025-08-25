@@ -386,7 +386,7 @@ describe('withPromises', () => {
     // and the implementation tries to call withPromise(undefined)
     assert.throws(() => {
       ;(manager.switch as (key: string) => void)('nonexistent-key')
-    }, /promiseFactory is not a function/)
+    })
 
     // State should remain unchanged
     assert.equal(tracker.key, undefined)

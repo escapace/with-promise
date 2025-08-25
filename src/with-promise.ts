@@ -133,13 +133,21 @@ const WITH_PROMISE_STATE = {
  * The state machine itself contains no async code - all promise handling is external.
  */
 // eslint-disable-next-line typescript/promise-function-async
-export function withPromise<T = unknown>(
-  promiseFactory: (onCancel: (cancelCallback: () => unknown) => void) => Promise<T>,
+export function withPromise<T = unknown, U extends unknown[] = []>(
+  ...arguments_: [
+    ...U,
+    (...arguments_: [...U, (cancelCallback: () => unknown) => void]) => Promise<T>,
+  ]
 ): WithPromise<T> {
   const service = interpret(promiseMachine)
+  const length = arguments_.length
+  const promiseFactory = arguments_[length - 1] as (
+    ...arguments_: [...U, (cancelCallback: () => unknown) => void]
+  ) => Promise<T>
+  const arguments__ = arguments_.slice(0, -1) as U
 
   // Handle promise resolution/rejection externally
-  void promiseFactory((cancelCallback) => {
+  void promiseFactory(...arguments__, (cancelCallback) => {
     // Add the callback to the state machine
     service.do(MachineAction.Setup, cancelCallback)
   })

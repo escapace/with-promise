@@ -64,19 +64,42 @@ if (response.state === 'cancelled') {
 
 ## API Reference
 
-### `withPromise<T>(promiseFactory)`
+### `withPromise<T, U extends unknown[] = []>(...args)`
 
-Creates a cancellable promise.
+Creates a cancellable promise with optional argument passing.
+
+**Overloads:**
+
+- `withPromise<T>(promiseFactory)` - Basic form without arguments
+- `withPromise<T, U extends unknown[]>(...args, promiseFactory)` - Form with arguments
 
 **Parameters:**
 
-- `promiseFactory`: `(onCancel: (callback: () => unknown) => void) => Promise<T>`
+- `...args` (optional): Arguments passed to the promise factory function
+- `promiseFactory`: `(...args: U, onCancel: (callback: () => unknown) => void) => Promise<T>`
   - Function that creates the async operation
-  - Receives `onCancel` callback to register cleanup functions
+  - Receives passed arguments followed by the `onCancel` callback
+  - `onCancel` callback registers cleanup functions
 
 **Returns:** `WithPromise<T>`
 
 - Extends `Promise<WithPromiseResult<T>>` with a `cancel()` method and `state` property
+
+**Example with arguments:**
+
+```typescript
+// Pass configuration to the promise factory
+const request = withPromise('/api/users', { timeout: 5000 }, async (url, config, onCancel) => {
+  const controller = new AbortController()
+  onCancel(() => controller.abort())
+
+  const response = await fetch(url, {
+    signal: controller.signal,
+    ...config,
+  })
+  return await response.json()
+})
+```
 
 ### Promise Result
 

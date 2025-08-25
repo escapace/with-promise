@@ -541,4 +541,31 @@ describe('Promise Wrapper', () => {
       assert.equal(cancellationCallbackCompleted, true)
     })
   })
+
+  describe('Argument Passing', () => {
+    it('passes arguments to promise factory in correct order', async () => {
+      const argumentsSpy = vi.fn()
+
+      const promiseWrapper = withPromise(
+        'should be first argument',
+        'should be second argument',
+        async (second, third, onCancel) => {
+          argumentsSpy(second, third)
+          onCancel(noop)
+          return await Promise.resolve(1)
+        },
+      )
+
+      assert.equal(promiseWrapper.state, 'pending')
+      const result = await promiseWrapper
+      assert.equal(promiseWrapper.state, 'fulfilled')
+      assert.deepEqual(result, { state: 'fulfilled', value: 1 })
+
+      assert.equal(argumentsSpy.mock.calls.length, 1)
+      assert.deepEqual(argumentsSpy.mock.calls[0], [
+        'should be first argument',
+        'should be second argument',
+      ])
+    })
+  })
 })
