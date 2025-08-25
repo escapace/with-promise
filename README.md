@@ -48,6 +48,9 @@ const request = withPromise(async (onCancel) => {
 // Cancel the request after 2 seconds
 setTimeout(() => request.cancel(), 2000)
 
+// Check state during execution
+console.log('Status:', request.state) // 'pending'
+
 // Handle the result
 const response = await request
 if (response.state === 'cancelled') {
@@ -73,7 +76,7 @@ Creates a cancellable promise.
 
 **Returns:** `WithPromise<T>`
 
-- Extends `Promise<WithPromiseResult<T>>` with a `cancel()` method
+- Extends `Promise<WithPromiseResult<T>>` with a `cancel()` method and `state` property
 
 ### Promise Result
 
@@ -100,6 +103,16 @@ promise.cancel(): Promise<void>
 - Executes all registered cancellation callbacks
 - Returns a Promise that resolves when cleanup is complete
 - Safe to call multiple times
+
+### State Property
+
+```typescript
+promise.state: 'pending' | 'fulfilled' | 'rejected' | 'cancelled'
+```
+
+- Returns the current state of the promise
+- Updates synchronously when state changes
+- Useful for conditional logic and debugging
 
 # withPromises
 

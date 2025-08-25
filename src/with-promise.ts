@@ -117,7 +117,16 @@ const promiseMachine = stateMachine()
 
 export interface WithPromise<T> extends Promise<WithPromiseResult<T>> {
   cancel: () => Promise<void>
+  state: 'cancelled' | 'fulfilled' | 'pending' | 'rejected'
 }
+
+const WITH_PROMISE_STATE = {
+  [MachineState.Cancelled]: 'cancelled',
+  [MachineState.Cancelling]: 'cancelled',
+  [MachineState.Fulfilled]: 'fulfilled',
+  [MachineState.Pending]: 'pending',
+  [MachineState.Rejected]: 'rejected',
+} as const
 
 /**
  * Creates a promise wrapper with state machine tracking and cancellation support.
@@ -165,14 +174,13 @@ export function withPromise<T = unknown>(
     return
   }
 
-  // TODO: add a state property?
-  // void Object.defineProperties(promise, {
-  //   state: {
-  //     get() {
-  //       return service.context.deferred.
-  //     }
-  //   },
-  // })
+  void Object.defineProperties(promise, {
+    state: {
+      get() {
+        return WITH_PROMISE_STATE[service.state]
+      },
+    },
+  })
 
   // Directly assign cancel method to the promise object
   ;(promise as WithPromise<T>).cancel = cancel
