@@ -39,8 +39,6 @@ interface WithPromisesContext {
 
   inFlightKey: number | string | symbol | undefined
   inFlightPromiseCancel: WithPromise<unknown>['cancel'] | undefined
-
-  subscriptions: WithPromisesContextSubscription[]
 }
 
 // Action payloads
@@ -67,8 +65,6 @@ const machine = stateMachine()
 
     inFlightKey: undefined,
     inFlightPromiseCancel: undefined,
-
-    subscriptions: [],
   }))
 
   /**
@@ -147,7 +143,7 @@ const machine = stateMachine()
 
 export const withPromises = <T extends object>(records: WithPromisesRecord<T>): WithPromises<T> => {
   const service = interpret(machine)
-  const { subscriptions } = service.context
+  const subscriptions: WithPromisesContextSubscription[] = []
 
   service.subscribe(({ action, state }) => {
     if (
