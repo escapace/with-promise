@@ -42,7 +42,7 @@
   "license": "MPL-2.0",
   "module": "lib/neutral/index.js",
   "peerDependencies": {
-    "@escapace/deferred": "^1.1.1",
+    "@escapace/deferred": "^2.0.0",
     "@escapace/fsm": "^4.2.0",
     "coastal": "^0.2.1"
   },
