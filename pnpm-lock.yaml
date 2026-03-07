@@ -12,8 +12,8 @@ importers:
         specifier: ^1.1.1
         version: 1.1.1
       '@escapace/fsm':
-        specifier: ^4.2.0
-        version: 4.2.0(@escapace/typelevel@2.0.2)(coastal@0.2.1)
+        specifier: ^5.0.0
+        version: 5.0.0(@escapace/typelevel@2.0.2)(coastal@0.2.1)
       coastal:
         specifier: ^0.2.1
         version: 0.2.1
@@ -336,9 +336,9 @@ packages:
     resolution: {integrity: sha512-aIE3h1dexUN0D75PrthDFnaoxdIMp9LQOSc6tGFvfbwOHlt1/ICYAsqGGn/F9Yj4O7xJsdxSgwUgGn/oMhWzmw==}
     engines: {pnpm: '>=10.10.0'}
 
-  '@escapace/fsm@4.2.0':
-    resolution: {integrity: sha512-X5rUaOltGILXvD0fi3xIlWnXiaAH8vC01hD5DGUubCUPliPtSwMLhRXTfwVj2G/bwVaESpZrrWEIojb7UgWHnQ==}
-    engines: {pnpm: ^10.14.0}
+  '@escapace/fsm@5.0.0':
+    resolution: {integrity: sha512-nE4+PkihWK9dH5aBPQkymMnN6yCywx4zhMPRWq9VoKsyb8qdRJCyp8u+4IWzVKFSBLKf7M+MtT5lIYJWZAQIvA==}
+    engines: {pnpm: '>=10.17.1'}
     peerDependencies:
       '@escapace/typelevel': ^2.0.2
       coastal: ^0.2.1
@@ -3192,7 +3192,7 @@ snapshots:
 
   '@escapace/deferred@1.1.1': {}
 
-  '@escapace/fsm@4.2.0(@escapace/typelevel@2.0.2)(coastal@0.2.1)':
+  '@escapace/fsm@5.0.0(@escapace/typelevel@2.0.2)(coastal@0.2.1)':
     dependencies:
       '@escapace/typelevel': 2.0.2
       coastal: 0.2.1
