@@ -43,7 +43,7 @@
   "module": "lib/neutral/index.js",
   "peerDependencies": {
     "@escapace/deferred": "^1.1.1",
-    "@escapace/fsm": "^4.2.0",
+    "@escapace/fsm": "^6.0.0",
     "coastal": "^0.2.1"
   },
   "private": false,
