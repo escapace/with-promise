@@ -8,8 +8,8 @@
   },
   "bugs": "https://github.com/escapace/with-promise/issues",
   "devDependencies": {
-    "@commitlint/cli": "19.8.1",
-    "@commitlint/config-conventional": "19.8.1",
+    "@commitlint/cli": "20.5.0",
+    "@commitlint/config-conventional": "20.5.0",
     "@escapace/pnpm-pack": "0.8.0",
     "@ls-lint/ls-lint": "2.3.1",
     "@vitest/coverage-v8": "3.2.4",
