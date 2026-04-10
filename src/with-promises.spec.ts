@@ -1,18 +1,24 @@
 import { Deferred } from '@escapace/deferred'
-import { afterEach, assert, beforeEach, describe, it, vi } from 'vitest'
+import { afterEach, assert, beforeEach, describe, it, type Mock, vi } from 'vitest'
 import { withPromises, type WithPromises, type WithPromisesRecord } from './'
 
 // eslint-disable-next-line typescript/no-empty-function
 const noop = () => {}
 
+type CancelCallback = () => unknown
+type CancelCallbackMock = Mock<CancelCallback>
+type PromiseFactory<T> = (onCancel: (cancelCallback: CancelCallback) => void) => Promise<T>
+type PromiseFactoryMock<T> = Mock<PromiseFactory<T>>
+
 // Test helper functions to reduce duplication
-function createMockFactory<T>(deferred: Deferred<T>, cancelCallback?: () => void) {
-  return vi
-    .fn<(onCancel: (cancelCallback: () => unknown) => void) => Promise<T>>()
-    .mockImplementation(async (onCancel: (cancelCallback: () => unknown) => void) => {
-      onCancel(cancelCallback ?? vi.fn(noop))
-      return await deferred.promise
-    })
+function createMockFactory<T>(
+  deferred: Deferred<T>,
+  cancelCallback?: CancelCallback,
+): PromiseFactoryMock<T> {
+  return vi.fn<PromiseFactory<T>>().mockImplementation(async (onCancel) => {
+    onCancel(cancelCallback ?? vi.fn<CancelCallback>(noop))
+    return await deferred.promise
+  })
 }
 
 function createTestManager<T extends object>(factoryMap: WithPromisesRecord<T>) {
@@ -51,8 +57,8 @@ function assertStateChange<T extends object, K extends keyof T = keyof T>(
 
 function setupMultipleFactories<T>(count: number) {
   const deferreds: Array<Deferred<T>> = []
-  const cancelCallbacks: Array<ReturnType<typeof vi.fn>> = []
-  const factories: Array<ReturnType<typeof vi.fn>> = []
+  const cancelCallbacks: CancelCallbackMock[] = []
+  const factories: Array<PromiseFactoryMock<T>> = []
 
   for (let index = 0; index < count; index++) {
     const deferred = new Deferred<T>()
@@ -81,13 +87,12 @@ function createSubscriptionTest<T extends object>(factoryMap: T) {
 
 function createDynamicFactory<T>(
   deferreds: Array<Deferred<T>>,
-  cancelCallbacks: Array<ReturnType<typeof vi.fn>>,
-) {
+  cancelCallbacks: CancelCallbackMock[],
+): PromiseFactoryMock<T> {
   let callCount = 0
-  return vi.fn().mockImplementation(async (onCancel: (cancelCallback: () => unknown) => void) => {
+  return vi.fn<PromiseFactory<T>>().mockImplementation(async (onCancel) => {
     const currentCall = callCount++
-    // eslint-disable-next-line typescript/strict-boolean-expressions
-    onCancel(cancelCallbacks[currentCall] || vi.fn(noop))
+    onCancel(cancelCallbacks[currentCall] ?? vi.fn<CancelCallback>(noop))
     return await deferreds[currentCall].promise
   })
 }
@@ -411,6 +416,23 @@ describe('withPromises', () => {
 
     await executeAndResolve(manager, 'key2', deferreds[1], 'value2')
     assert.equal(subscriptionSpy.mock.calls.length, 1)
+  })
+
+  it('should ignore duplicate subscriptions for the same callback', async () => {
+    const deferred = new Deferred<string>()
+    const factory = createMockFactory(deferred)
+    const manager = withPromises({ key1: factory })
+    const subscriptionSpy = vi.fn()
+
+    const unsubscribe1 = manager.subscribe(subscriptionSpy)
+    const unsubscribe2 = manager.subscribe(subscriptionSpy)
+
+    await executeAndResolve(manager, 'key1', deferred, 'value1')
+
+    assert.equal(subscriptionSpy.mock.calls.length, 1)
+
+    unsubscribe1()
+    unsubscribe2()
   })
 
   it(`fuzz`, { repeats: 100 }, async () => {

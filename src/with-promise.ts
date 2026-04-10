@@ -22,20 +22,61 @@ interface MachineContext {
   onCancelCallbacks: Set<() => unknown>
 }
 
+/**
+ * Result returned when the operation passed to {@link withPromise} fulfills.
+ *
+ * @typeParam T - Value produced by the operation.
+ */
 export interface WithPromiseFulfilledResult<T = unknown> {
+  /**
+   * Indicates that the operation fulfilled.
+   */
   state: 'fulfilled'
+
+  /**
+   * Fulfilled value produced by the operation.
+   */
   value: T
 }
 
+/**
+ * Result returned when the operation passed to {@link withPromise} rejects.
+ *
+ * @remarks
+ * The returned promise still fulfills. Rejections are represented as data so callers can branch on
+ * `state` without using `try`/`catch`.
+ */
 export interface WithPromiseRejectedResult {
+  /**
+   * Indicates that the operation rejected.
+   */
   state: 'rejected'
+
+  /**
+   * Rejection reason from the operation.
+   */
   value: unknown
 }
 
+/**
+ * Result returned when a {@link WithPromise} is cancelled before it fulfills or rejects.
+ */
 export interface WithPromiseCancelledResult {
+  /**
+   * Indicates that cancellation won the race with fulfillment or rejection.
+   */
   state: 'cancelled'
 }
 
+/**
+ * Settled result produced by a {@link WithPromise}.
+ *
+ * @remarks
+ * Unlike a regular promise, {@link withPromise} always fulfills with one of these tagged result
+ * objects. Use `state` to distinguish fulfillment, rejection, and cancellation.
+ *
+ * @typeParam T - Value produced when the operation fulfills.
+ */
 export type WithPromiseResult<T = unknown> =
   | WithPromiseCancelledResult
   | WithPromiseFulfilledResult<T>
@@ -44,7 +85,7 @@ export type WithPromiseResult<T = unknown> =
 /**
  * Creates a promise state machine definition
  */
-const promiseMachine = stateMachine()
+const promiseMachine = /*@__PURE__*/ stateMachine()
   .state(MachineState.Pending)
   .state(MachineState.Fulfilled)
   .state(MachineState.Rejected)
@@ -116,8 +157,36 @@ const promiseMachine = stateMachine()
   )
   .done()
 
+/**
+ * Promise returned by {@link withPromise}.
+ *
+ * @remarks
+ * This interface extends `Promise<WithPromiseResult<T>>` with synchronous state inspection and a
+ * `cancel()` method. The promise never rejects. Fulfillment, rejection, and cancellation are all
+ * reported through {@link WithPromiseResult}.
+ *
+ * @typeParam T - Value produced when the operation fulfills.
+ */
 export interface WithPromise<T> extends Promise<WithPromiseResult<T>> {
+  /**
+   * Current state of the operation.
+   *
+   * @remarks
+   * The value starts as `pending` and then changes synchronously to `fulfilled`, `rejected`, or
+   * `cancelled` as soon as that result becomes final.
+   */
   state: 'cancelled' | 'fulfilled' | 'pending' | 'rejected'
+
+  /**
+   * Cancels the operation.
+   *
+   * @remarks
+   * The first call settles the returned promise immediately as cancelled, then runs registered
+   * cancellation callbacks sequentially. The promise returned by `cancel()` resolves after that
+   * cleanup completes. Repeated calls are safe.
+   *
+   * @returns A promise that resolves when cancellation callbacks have finished running.
+   */
   cancel: () => Promise<void>
 }
 
@@ -130,8 +199,26 @@ const WITH_PROMISE_STATE = {
 } as const
 
 /**
- * Creates a promise wrapper with state machine tracking and cancellation support.
- * The state machine itself contains no async code - all promise handling is external.
+ * Creates a cancellable promise that always fulfills with a {@link WithPromiseResult}.
+ *
+ * @remarks
+ * The returned promise exposes synchronous state inspection through `state` and cancellation
+ * through `cancel()`. When the operation fulfills, the promise resolves to
+ * `{ state: 'fulfilled', value }`. When the operation rejects, the promise resolves to
+ * `{ state: 'rejected', value }` instead of rejecting.
+ *
+ * The first call to `cancel()` settles the promise immediately as `{ state: 'cancelled' }`, then
+ * runs registered cancellation callbacks sequentially. The promise returned by `cancel()` resolves
+ * after that cleanup finishes. Errors thrown by cancellation callbacks are ignored so later
+ * callbacks still run.
+ *
+ * The function accepts either `withPromise(promiseFactory)` or `withPromise(...args, promiseFactory)`.
+ * Any leading arguments are passed to `promiseFactory` before the `onCancel` callback.
+ *
+ * @typeParam T - Value produced when the operation fulfills.
+ * @typeParam U - Tuple of arguments forwarded to `promiseFactory` before `onCancel`.
+ * @param arguments_ - Arguments passed to the promise factory, followed by the promise factory.
+ * @returns A {@link WithPromise} that resolves to the operation result and exposes cancellation.
  */
 // eslint-disable-next-line typescript/promise-function-async
 export function withPromise<T = unknown, U extends unknown[] = []>(
