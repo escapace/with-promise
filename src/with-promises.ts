@@ -140,6 +140,7 @@ const machine = stateMachine()
       return context
     },
   )
+  .done()
 
 export const withPromises = <T extends object>(records: WithPromisesRecord<T>): WithPromises<T> => {
   const service = interpret(machine)
@@ -152,7 +153,7 @@ export const withPromises = <T extends object>(records: WithPromisesRecord<T>): 
       action.payload.state === 'fulfilled'
     ) {
       const { key, value } = action.payload
-      // eslint-disable-next-line typescript/prefer-for-of
+
       for (let index = 0; index < subscriptions.length; index++) {
         subscriptions[index](key, value)
       }

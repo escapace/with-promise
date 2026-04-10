@@ -20,9 +20,9 @@ function createTestManager<T extends object>(factoryMap: WithPromisesRecord<T>) 
   const tracker = new StateTracker(manager)
 
   return {
-    cleanup: () => tracker.destroy(),
     manager,
     tracker,
+    cleanup: () => tracker.destroy(),
   }
 }
 
@@ -505,7 +505,7 @@ describe('withPromises', () => {
       assert((item.value as string).startsWith(`${item.key}`))
     }
 
-    // eslint-disable-next-line typescript/no-non-null-assertion, typescript/strict-boolean-expressions
+    // eslint-disable-next-line typescript/strict-boolean-expressions
     const lastKey = history.at(-1)?.key!.startsWith('key1') ? 'key1' : 'key2'
     const otherKey = lastKey === 'key1' ? 'key2' : 'key1'
 

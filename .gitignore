@@ -1,6 +1,7 @@
 .aider*
 .cache
 .cache/
+.claude/*.local.json
 .docusaurus
 .dynamodb/
 .env
@@ -11,6 +12,7 @@
 .eslintcache
 .fusebox/
 .grunt
+.lake/
 .lock-wscript
 .next
 .node_repl_history

@@ -8,25 +8,26 @@
   },
   "bugs": "https://github.com/escapace/with-promise/issues",
   "devDependencies": {
-    "@commitlint/cli": "19.8.1",
-    "@commitlint/config-conventional": "19.8.1",
+    "@commitlint/cli": "20.5.0",
+    "@commitlint/config-conventional": "20.5.0",
     "@escapace/pnpm-pack": "0.8.0",
+    "@escapace/syncpack-configuration": "0.1.0",
     "@ls-lint/ls-lint": "2.3.1",
-    "@vitest/coverage-v8": "3.2.4",
-    "eslint": "9.34.0",
-    "eslint-config-escapace": "5.14.0",
-    "esroll": "0.4.5",
-    "knip": "5.63.0",
-    "lefthook": "1.12.3",
-    "prettier": "3.6.2",
+    "@vitest/coverage-v8": "4.1.2",
+    "eslint": "10.1.0",
+    "eslint-config-escapace": "5.16.0",
+    "esroll": "1.1.5",
+    "knip": "6.3.0",
+    "lefthook": "2.1.4",
+    "prettier": "3.8.1",
     "prettier-config-escapace": "1.2.2",
-    "syncpack": "13.0.4",
-    "tsx": "4.20.4",
+    "syncpack": "14.3.0",
+    "tsx": "4.21.0",
     "typescript": "5.9.3",
-    "vitest": "3.2.4"
+    "vitest": "4.1.2"
   },
   "engines": {
-    "pnpm": "^10.14.0"
+    "pnpm": ">=10.33.0"
   },
   "exports": {
     ".": {
@@ -42,9 +43,9 @@
   "license": "MPL-2.0",
   "module": "lib/neutral/index.js",
   "peerDependencies": {
-    "@escapace/deferred": "^1.1.1",
-    "@escapace/fsm": "^4.2.0",
-    "coastal": "^0.2.1"
+    "@escapace/deferred": "^2.0.0",
+    "@escapace/fsm": "^6.1.0",
+    "coastal": "^0.4.0"
   },
   "private": false,
   "publishConfig": {
@@ -54,14 +55,15 @@
   "repository": "escapace/with-promise",
   "scripts": {
     "build": "tsx scripts/build.ts",
-    "format": "syncpack format && eslint --no-warn-ignored --fix && prettier -uw .",
+    "format": "syncpack format && eslint --no-warn-ignored --fix && prettier --no-error-on-unmatched-pattern -uw .",
     "lint": "ls-lint --config .ls-lint.yaml && knip --no-config-hints && eslint",
     "ls-lint": "ls-lint --config .ls-lint.yaml",
     "pack": "pnpm-pack package --pack-destination lib",
     "prepare": "lefthook install",
-    "syncpack": "syncpack fix-mismatches && syncpack set-semver-ranges && syncpack format",
+    "syncpack": "syncpack fix && syncpack format",
     "test": "vitest --no-watch --coverage",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "update": "ncu --cooldown 7 -p pnpm -u --peer --dep dev,peer,prod,optional && pnpm run syncpack"
   },
   "sideEffects": false,
   "type": "module",

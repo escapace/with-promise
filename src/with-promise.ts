@@ -114,10 +114,11 @@ const promiseMachine = stateMachine()
       return context
     },
   )
+  .done()
 
 export interface WithPromise<T> extends Promise<WithPromiseResult<T>> {
-  cancel: () => Promise<void>
   state: 'cancelled' | 'fulfilled' | 'pending' | 'rejected'
+  cancel: () => Promise<void>
 }
 
 const WITH_PROMISE_STATE = {
