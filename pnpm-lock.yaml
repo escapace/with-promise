@@ -12,8 +12,8 @@ importers:
         specifier: ^2.0.0
         version: 2.0.0
       '@escapace/fsm':
-        specifier: ^6.1.0
-        version: 6.1.0(@escapace/reconcile@0.1.0(coastal@0.4.0)(es-toolkit@1.45.1))(@escapace/typelevel@2.0.3)(coastal@0.4.0)(es-toolkit@1.45.1)
+        specifier: ^6.1.1
+        version: 6.1.1(@escapace/reconcile@0.1.0(coastal@0.4.0)(es-toolkit@1.45.1))(@escapace/typelevel@2.0.3)(coastal@0.4.0)(es-toolkit@1.45.1)
       coastal:
         specifier: ^0.4.0
         version: 0.4.0
@@ -40,8 +40,8 @@ importers:
         specifier: 10.1.0
         version: 10.1.0(jiti@2.6.1)
       eslint-config-escapace:
-        specifier: 5.16.0
-        version: 5.16.0(@typescript-eslint/eslint-plugin@8.58.0(@typescript-eslint/parser@8.58.0(eslint@10.1.0(jiti@2.6.1))(typescript@5.9.3))(eslint@10.1.0(jiti@2.6.1))(typescript@5.9.3))(@typescript-eslint/parser@8.58.0(eslint@10.1.0(jiti@2.6.1))(typescript@5.9.3))(eslint@10.1.0(jiti@2.6.1))(globals@17.4.0)(typescript@5.9.3)(vitest@4.1.2(@types/node@25.5.2)(vite@8.0.3(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/node@25.5.2)(esbuild@0.27.7)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.3)))
+        specifier: 5.16.1
+        version: 5.16.1(@typescript-eslint/eslint-plugin@8.58.0(@typescript-eslint/parser@8.58.0(eslint@10.1.0(jiti@2.6.1))(typescript@5.9.3))(eslint@10.1.0(jiti@2.6.1))(typescript@5.9.3))(@typescript-eslint/parser@8.58.0(eslint@10.1.0(jiti@2.6.1))(typescript@5.9.3))(eslint@10.1.0(jiti@2.6.1))(globals@17.4.0)(typescript@5.9.3)(vitest@4.1.2(@types/node@25.5.2)(vite@8.0.3(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/node@25.5.2)(esbuild@0.27.7)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.3)))
       esroll:
         specifier: 1.2.0
         version: 1.2.0(@types/node@25.5.2)
@@ -503,8 +503,8 @@ packages:
     resolution: {integrity: sha512-3wXRbLveO912GsOMX75v5XNpXRbOodcMCCxel+XJP9gjC1dXv3kXZ6kEgk5GZt/SLisjcluGi8t7hWXMlU+kHg==}
     engines: {pnpm: '>=10.29.2'}
 
-  '@escapace/fsm@6.1.0':
-    resolution: {integrity: sha512-Nmxvv00IDzyH1XRX4olLfdX9h3Uab/boMynKeDp60JVFS45xVKsoHA7ZbBq6eZ/Y9ePLxh/EbCHQQf8YBGoDjw==}
+  '@escapace/fsm@6.1.1':
+    resolution: {integrity: sha512-ZNiTv7tQEIOXv6RTbn7ybrswoHzsHpQy7lQqMJ/ZG4lswvhf5XwkZiR6wUFYyWwvmFJtQ25EOP6UrA1eKuf/8w==}
     engines: {pnpm: '>=10.29.2'}
     peerDependencies:
       '@escapace/reconcile': ^0.1.0
@@ -1929,8 +1929,8 @@ packages:
     resolution: {integrity: sha512-/veY75JbMK4j1yjvuUxuVsiS/hr/4iHs9FTT6cgTexxdE0Ly/glccBAkloH/DofkjRbZU3bnoj38mOmhkZ0lHw==}
     engines: {node: '>=12'}
 
-  eslint-config-escapace@5.16.0:
-    resolution: {integrity: sha512-BrpaFnCD2+7wDGmccPcheo9nUsDDvm6S6g0WclVrQRMQxEs0nZNFv02eOTExc33+v50yCeBicxZU+of1cTKOBg==}
+  eslint-config-escapace@5.16.1:
+    resolution: {integrity: sha512-x585aHbgKXy6yTfZG3mxVZuf2B1B3O8kLQilFMOE6DpNZKHCW0/V1+P6GpkuDHfuJe9bjTeaS06AQ1ClySA0Yg==}
     engines: {node: '>=24.13.0', pnpm: '>=10.29.2'}
     peerDependencies:
       eslint: ^9.0.0 || ^10.0.0
@@ -3901,7 +3901,7 @@ snapshots:
 
   '@escapace/deferred@2.0.0': {}
 
-  '@escapace/fsm@6.1.0(@escapace/reconcile@0.1.0(coastal@0.4.0)(es-toolkit@1.45.1))(@escapace/typelevel@2.0.3)(coastal@0.4.0)(es-toolkit@1.45.1)':
+  '@escapace/fsm@6.1.1(@escapace/reconcile@0.1.0(coastal@0.4.0)(es-toolkit@1.45.1))(@escapace/typelevel@2.0.3)(coastal@0.4.0)(es-toolkit@1.45.1)':
     dependencies:
       '@escapace/reconcile': 0.1.0(coastal@0.4.0)(es-toolkit@1.45.1)
       '@escapace/typelevel': 2.0.3
@@ -5219,7 +5219,7 @@ snapshots:
 
   escape-string-regexp@5.0.0: {}
 
-  eslint-config-escapace@5.16.0(@typescript-eslint/eslint-plugin@8.58.0(@typescript-eslint/parser@8.58.0(eslint@10.1.0(jiti@2.6.1))(typescript@5.9.3))(eslint@10.1.0(jiti@2.6.1))(typescript@5.9.3))(@typescript-eslint/parser@8.58.0(eslint@10.1.0(jiti@2.6.1))(typescript@5.9.3))(eslint@10.1.0(jiti@2.6.1))(globals@17.4.0)(typescript@5.9.3)(vitest@4.1.2(@types/node@25.5.2)(vite@8.0.3(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/node@25.5.2)(esbuild@0.27.7)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.3))):
+  eslint-config-escapace@5.16.1(@typescript-eslint/eslint-plugin@8.58.0(@typescript-eslint/parser@8.58.0(eslint@10.1.0(jiti@2.6.1))(typescript@5.9.3))(eslint@10.1.0(jiti@2.6.1))(typescript@5.9.3))(@typescript-eslint/parser@8.58.0(eslint@10.1.0(jiti@2.6.1))(typescript@5.9.3))(eslint@10.1.0(jiti@2.6.1))(globals@17.4.0)(typescript@5.9.3)(vitest@4.1.2(@types/node@25.5.2)(vite@8.0.3(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/node@25.5.2)(esbuild@0.27.7)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.3))):
     dependencies:
       '@stylistic/eslint-plugin': 5.10.0(eslint@10.1.0(jiti@2.6.1))
       '@typescript-eslint/utils': 8.58.0(eslint@10.1.0(jiti@2.6.1))(typescript@5.9.3)

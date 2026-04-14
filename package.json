@@ -15,7 +15,7 @@
     "@ls-lint/ls-lint": "2.3.1",
     "@vitest/coverage-v8": "4.1.2",
     "eslint": "10.1.0",
-    "eslint-config-escapace": "5.16.0",
+    "eslint-config-escapace": "5.16.1",
     "esroll": "1.2.0",
     "knip": "6.3.0",
     "lefthook": "2.1.4",
@@ -44,7 +44,7 @@
   "module": "lib/neutral/index.js",
   "peerDependencies": {
     "@escapace/deferred": "^2.0.0",
-    "@escapace/fsm": "^6.1.0",
+    "@escapace/fsm": "^6.1.1",
     "coastal": "^0.4.0"
   },
   "private": false,
