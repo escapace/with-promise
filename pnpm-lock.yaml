@@ -28,8 +28,8 @@ importers:
         specifier: 0.9.0
         version: 0.9.0(@pnpm/logger@5.2.0)
       '@escapace/syncpack-configuration':
-        specifier: 0.2.0
-        version: 0.2.0(syncpack@15.3.1)
+        specifier: 0.3.0
+        version: 0.3.0(syncpack@15.3.1)
       '@ls-lint/ls-lint':
         specifier: 2.3.1
         version: 2.3.1
@@ -368,10 +368,10 @@ packages:
       coastal: ^0.4.0
       es-toolkit: ^1.45.1
 
-  '@escapace/syncpack-configuration@0.2.0':
-    resolution: {integrity: sha512-z043blYUdIDlTpYc6nhOLhUuETgbRD3ML/FpTp+mlleGO9+b/B5re2z69CL6ER6rrvqUbsUo0j/fx/Ku1VFF+w==}
+  '@escapace/syncpack-configuration@0.3.0':
+    resolution: {integrity: sha512-wqnoFkEAEHVOeP9cwst8mLLwS7rMruZqT8jiOF4v1dbnRc6gV482M5HFHpqc/sIK9sNoYLvyGxlgw+POQltBKQ==}
     peerDependencies:
-      syncpack: ^14.3.0
+      syncpack: ^15 || ^16
 
   '@escapace/typelevel@2.0.5':
     resolution: {integrity: sha512-laUxDzfGWezIhd+3b4vGev3InXapQ5ab4tgn2BSyouBPyfL7JaTnDaYJIq/8zz1KSg5gjakD+Gm6aNcpYe2N3Q==}
@@ -3587,7 +3587,7 @@ snapshots:
       coastal: 0.4.0
       es-toolkit: 1.46.1
 
-  '@escapace/syncpack-configuration@0.2.0(syncpack@15.3.1)':
+  '@escapace/syncpack-configuration@0.3.0(syncpack@15.3.1)':
     dependencies:
       syncpack: 15.3.1
 
